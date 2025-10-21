@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+#layout {
+  font-family: Geist;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.button-no-bg {
+  border-color: oklch(0.7 0 0);
+  background-color: transparent;
+}
+
+.button-primary {
+  border-color: oklch(0.88 0 0);
+  background-color: oklch(.98 0 0);
+}
+
+.button-primary:hover {
+  border-color: oklch(0.78 0 0);
+  background-color: oklch(0.85 0 0 / 0.5);
+}
