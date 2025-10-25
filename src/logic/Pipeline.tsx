@@ -46,7 +46,7 @@ export class Pipeline {
             return false;
         }
 
-        this.addDecodeStepIfNeeded();
+        this.addDecodeStep();
         this.addEncodeStepIfNeeded();
         
         return true;
@@ -64,6 +64,8 @@ export class Pipeline {
     }
 
     public async run(content: string, steps: Transformation[]): Promise<string> {
+        this.addDecodeStep();
+
         const pipeline = this.fromStepsToPipelineDefinition(steps);
 
         const args = [
@@ -88,11 +90,7 @@ export class Pipeline {
     }
 
     
-    private addDecodeStepIfNeeded(): void {
-        if (this.steps[0].type === "decode") {
-            return;
-        }
-
+    private decodeStep(): TransformationStep {
         const decodeStep: TransformationStep = {
             params: {},
             icon: null,
@@ -103,14 +101,10 @@ export class Pipeline {
             pipeline_ref: "DecodeCSV",
         }
 
-        this.steps.unshift(decodeStep);
+        return decodeStep;
     }
-
-    private addEncodeStepIfNeeded(): void {
-        if (this.steps[this.steps.length - 1].type === "encode") {
-            return;
-        }
-
+    
+    private encodeStep(): TransformationStep {
         const encodeStep: TransformationStep = {
             params: {},
             icon: null,
@@ -121,6 +115,6 @@ export class Pipeline {
             pipeline_ref: "EncodeJSON",
         }
 
-        this.steps.push(encodeStep);
+        return encodeStep;
     }
 }
