@@ -1,14 +1,13 @@
-import { TransformationStep } from "../models/TransformationStep";
-
 import {
   Trash,
   ChevronUp,
   ChevronDown,
 } from "lucide-react"
+import { Transformation } from "../models/Transformation"
 
 type TransformationStepProps = {
     index: number
-    step: TransformationStep
+    step: Transformation
     isSelected: boolean
     isFirst: boolean
     isLast: boolean
@@ -34,7 +33,7 @@ export function TransformationNode({index, step, isSelected, isFirst, isLast, on
     <div className={`rounded-lg border-2 bg-card shadow-sm transition-all cursor-pointer ${isSelected ? `${getNodeColor()} shadow-md` : "border-border" }`} onClick={onSelect}>
       <div className="flex items-center justify-between border-b border-border bg-muted/30 px-4 py-3">
         <div className="flex items-center gap-3">
-          <h1 className="p-1 text-md text-muted-foreground capitalize">{`#${index+1} - ${step.name}`}</h1>
+          <h1 className="p-1 text-md text-muted-foreground capitalize">{`#${index+1} - ${step.friendly_name}`}</h1>
         </div>
         <div className="flex items-center gap-1">
           <button className="button-no-bg rounded-sm outline-none h-7 w-7 p-0" onClick={(e) => {

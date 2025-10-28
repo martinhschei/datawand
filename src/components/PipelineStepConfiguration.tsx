@@ -14,7 +14,7 @@ export function PipelineStepConfiguration({ index, transformation: step, onChang
     <div className="pr-4 space-y-4">
         <div>
           <label className="block font-medium">Name</label>
-          <p className="text-sm text-muted-foreground">#{index+1} - {step.name}</p>
+          <p className="text-sm text-muted-foreground">#{index+1} - {step.friendly_name}</p>
         </div>
         <div>
           <label className="block font-medium">Description</label>

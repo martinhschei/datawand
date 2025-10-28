@@ -20,12 +20,18 @@ export function Transform() {
 
   useEffect(() => {
     console.log("Steps changed, running pipeline:", steps);
-    runPipeline(steps);
+    if (steps.length > 0) {
+        runPipeline(steps);
+    }
+    if (steps.length === 0) {
+        useAppState.setState({ transformedContent: null });
+    }
   }, [steps]);
 
-  const onAddStepNode = (node: Transformation) => {
-    console.log("Adding step node:", node);
-     const newStep = createStepFromTemplate(node, steps.length);
+  const onAddStepNode = (transformation: Transformation) => {
+    console.log("Adding step node:", transformation);
+    const stepCopy = JSON.parse(JSON.stringify(transformation));
+    const newStep = {...stepCopy, id: crypto.randomUUID() };
     const newSteps = [...steps, newStep];
     setSteps(newSteps);
   }
@@ -36,6 +42,9 @@ export function Transform() {
     if (index !== -1) {
       const newSteps = [...steps];
       newSteps.splice(index, 1)
+      if (newSteps.length > 0) {
+        setSelectedNode(newSteps[0]?.id);
+      }
       setSteps(newSteps);
     }
   }
@@ -44,7 +53,8 @@ export function Transform() {
     (async () => {
       pipeline.run(originalContent, steps)
         .then((output) => {
-          console.log("Pipeline Output:", output);
+            console.log("Pipeline Output:", output);
+            useAppState.setState({ transformedContent: output });
         })
         .catch((error) => {
           console.error("Pipeline Execution Error:", error);
@@ -58,19 +68,6 @@ export function Transform() {
     const newSteps = [...steps];
     newSteps[index] = step;
     setSteps(newSteps);
-  }
-
-  function createStepFromTemplate(t: Transformation, index: number): Transformation {
-    return {
-      id: crypto.randomUUID(),
-      icon: t.icon,
-      name: t.name,
-      type: t.type,
-      identifier: t.identifier,
-      key: `step_${index + 1}`,
-      description: t.description,
-      params: JSON.parse(JSON.stringify(t.params ?? {})),
-    };
   }
 
   return (
@@ -104,12 +101,20 @@ export function Transform() {
           </div>
         </div>
         <div className="mt-4 w-full border-t border-border pt-4">
-          <h2 className="font-semibold text-foreground">Preview {transformedContent == originalContent ? " (Original)" : " (Transformed)"}</h2>
-          <div className="rounded-lg border border-border bg-muted/20 p-4">
-            <pre className="whitespace-pre-wrap break-words text-sm text-muted-foreground">
-                {transformedContent}
-            </pre>
-          </div>
+            <section className="flex gap-4">
+                <div className="flex-1 rounded-lg border border-border bg-muted/20 p-4">
+                    <h2 className="font-semibold text-foreground mb-4">Original Content</h2>
+                    <pre className="whitespace-pre-wrap break-words text-sm text-muted-foreground">
+                        {originalContent}
+                    </pre>
+                </div>
+                <div className="flex-1 rounded-lg border border-border bg-muted/20 p-4">
+                    <h2 className="font-semibold text-foreground mb-4">Transformed Content</h2>
+                    <pre className="whitespace-pre-wrap break-words text-sm text-muted-foreground">
+                        {transformedContent}
+                    </pre>
+                </div>
+            </section>
         </div>
       </section>
     </div>

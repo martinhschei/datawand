@@ -3,11 +3,11 @@ import { TransformationNode } from "./TransformationNode";
 import { Transformation } from "../models/Transformation";
 
 type PipelineStackProps = {
-  selectedNode: string,
-  steps: Transformation[]
-  onDeleteNode: (id: string) => void
-  onSelectNode: (id: string) => void
-  onMoveNode: (id: string, direction: "up" | "down") => void
+    selectedNode: string,
+    steps: Transformation[]
+    onDeleteNode: (id: string) => void
+    onSelectNode: (id: string) => void
+    onMoveNode: (id: string, direction: "up" | "down") => void
 }
 
 export function PipelineStack({ steps, selectedNode, onSelectNode, onDeleteNode, onMoveNode }: PipelineStackProps) {
